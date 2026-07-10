@@ -58,6 +58,7 @@ namespace pid
 {
     inline constexpr const char* core        = "core";
     inline constexpr const char* coreMorph   = "coreMorph";   // A/B morph (hybrid core)
+    inline constexpr const char* input       = "input";       // input trim, dB
     inline constexpr const char* drive       = "drive";       // FLUX drive, dB
     inline constexpr const char* bias        = "bias";        // DC asymmetry -> even harmonics
     inline constexpr const char* coreSat     = "coreSat";     // saturation intensity / knee
@@ -73,6 +74,7 @@ namespace pid
     inline constexpr const char* age         = "age";         // component tolerance drift
     inline constexpr const char* hum         = "hum";         // mains bleed depth
     inline constexpr const char* humFreq     = "humFreq";     // 50 / 60 Hz
+    inline constexpr const char* sideDrive   = "sideDrive";   // MS: extra Side drive, dB
     inline constexpr const char* stereoMode  = "stereoMode";
     inline constexpr const char* autoTrim    = "autoTrim";    // loudness-matched bypass
     inline constexpr const char* oversample  = "oversample";
@@ -95,8 +97,9 @@ struct ParamRange
 };
 
 // Continuous parameter table. (Choice/bool params are declared in the layout.)
-inline constexpr std::array<ParamRange, 13> kContinuousParams { {
+inline constexpr std::array<ParamRange, 15> kContinuousParams { {
     { pid::coreMorph,  0.0f,   1.0f,  0.5f,  1.0f, "",   "Core Morph"  },
+    { pid::input,    -24.0f,  24.0f,  0.0f,  1.0f, "dB", "Input"       },
     { pid::drive,    -24.0f,  24.0f,  0.0f,  1.0f, "dB", "Drive"       },
     { pid::bias,      -1.0f,   1.0f,  0.0f,  1.0f, "",   "Bias"        },
     { pid::coreSat,    0.0f,   1.0f,  0.35f, 1.0f, "",   "Core Sat"    },
@@ -109,6 +112,7 @@ inline constexpr std::array<ParamRange, 13> kContinuousParams { {
     { pid::lfSat,      0.0f,   1.0f,  0.4f,  1.0f, "",   "LF Sat"      },
     { pid::age,        0.0f,   1.0f,  0.15f, 1.0f, "",   "Age"         },
     { pid::hum,        0.0f,   1.0f,  0.0f,  1.0f, "",   "Hum"         },
+    { pid::sideDrive,-12.0f,  12.0f,  0.0f,  1.0f, "dB", "Side Drive"  },
 } };
 
 } // namespace fluxcore
