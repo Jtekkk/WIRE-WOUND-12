@@ -1,0 +1,14 @@
+build/
+cmake-build-*/
+*.o
+*.a
+*.so
+*.vst3
+*.component
+*.aaxplugin
+.DS_Store
+JUCE/
+_deps/
+*.user
+.idea/
+.vscode/
