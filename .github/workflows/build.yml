@@ -57,7 +57,7 @@ jobs:
       - name: Build installer (Windows)
         if: matrix.os == 'windows-latest'
         shell: cmd
-        run: iscc packaging\installer.iss "/DBuildDir=%CD%\build\FLUXCORE12_artefacts\Release"
+        run: '"%ProgramFiles(x86)%\Inno Setup 6\ISCC.exe" packaging\installer.iss "/DBuildDir=%CD%\build\FLUXCORE12_artefacts\Release"'
 
       - name: Upload Windows installer
         if: matrix.os == 'windows-latest'
@@ -77,7 +77,12 @@ jobs:
   release:
     name: Release
     needs: build
-    if: startsWith(github.ref, 'refs/tags/v')
+    # Fire on version tags, on the integration branch, or on manual dispatch.
+    # (Session credentials are branch-scoped, so CI mints the tag + release itself.)
+    if: >-
+      startsWith(github.ref, 'refs/tags/v') ||
+      github.ref == 'refs/heads/claude/fluxcore-12-vst-vaop15' ||
+      github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -106,5 +111,9 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'v0.1.0' }}
+          name: FLUXCORE-12 v0.1.0
+          prerelease: true
+          generate_release_notes: true
           files: release-assets/*
           fail_on_unmatched_files: true
